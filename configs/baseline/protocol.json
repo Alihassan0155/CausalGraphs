@@ -1,0 +1,8 @@
+{
+  "experiment": "sccvae_k562_ood_split_0_full",
+  "configuration_policy": "The saved training configuration is authoritative; do not duplicate or edit it here.",
+  "saved_config": "results/sccvae_baseline/fresh_20261021_214807/outs/ood_split_0_full/config.json",
+  "selected_checkpoint": "results/sccvae_baseline/fresh_20261021_214807/outs/ood_split_0_full/best_val_mmd.pth",
+  "evaluation_directory": "results/sccvae_baseline/fresh_20261021_214807/evaluation",
+  "discrepancy_audit": "results/sccvae_baseline/fresh_20261021_214807/evaluation/discrepancy_audit/discrepancy_audit.md"
+}

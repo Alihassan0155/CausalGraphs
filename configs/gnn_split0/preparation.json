@@ -1,0 +1,20 @@
+{
+  "dataset": "data/h5ad_datafiles/k562_annotated_raw_ood_split_0.h5ad",
+  "mapping": "sc_causal/train_util_files/new_estimated_dag_gene.csv",
+  "baseline_eligible_targets": "results/sccvae_baseline/fresh_20261021_214807/evaluation/no_test_shift_selection_MSE_All genes.csv",
+  "freeze_document": "results/sccvae_baseline/BASELINE_FREEZE.md",
+  "freeze_fallback": "results/sccvae_baseline/fresh_20261021_214807/evaluation/discrepancy_audit/discrepancy_audit.md",
+  "processed_directory": "processed/gnn_split0",
+  "graph_directory": "graphs/correlation_split0",
+  "expected_shape": [101930, 8563],
+  "expected_graph_nodes": 279,
+  "expected_eligible_targets": 54,
+  "chunk_rows": 256,
+  "storage_dtype": "float32",
+  "control_label": "non-targeting",
+  "seed": 20,
+  "correlation_threshold": 0.30,
+  "normalization": "normalize_total(target_sum=None) across full source file, then log1p, before graph-node slicing",
+  "delta_definition": "normalized log1p expression minus mean of training non-targeting controls; all 8563 output genes",
+  "evaluation_cell_policy": "Retain all source cells; provide a separate baseline-compatible test mask keeping the first floor(n/32)*32 cells per mapped target and excluding INTS2."
+}

@@ -1,0 +1,4 @@
+# Install in isolation; do not upgrade the baseline environment's causal-learn.
+# python -m pip install --no-deps --target .venv/module4a_packages -r configs/module4a/requirements.txt
+causal-learn==0.1.4.8
+momentchi2==0.1.8
