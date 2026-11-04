@@ -1,42 +1,62 @@
-# SCCVAE research workspace
+# CausalGraphs
 
-Windows / Python 3.12 / CUDA 12.4. Original SCCVAE source and preprocessing remain in `sc_causal/`; see [upstream instructions](docs/UPSTREAM_README.md).
+**An experimental workspace for causal-graph discovery, intervention-oriented modeling and reproducible baseline comparisons.**
 
-```text
-sc_causal/              Original source, GEARS baseline, gene mapping, author tables
-configs/baseline/       Protocol index pointing to the actual saved run configuration
-scripts/setup/          Environment installation and import verification
-scripts/baseline/       Training launcher, smoke test, evaluation and audit utilities
-scripts/data/           Resumable split-0 preparation, delta reader and validation
-scripts/causal/         Manual PC/BOSS discovery, bounded benchmarks and validation
-experiments/baseline/   Baseline run index and artifact locations
-experiments/future/     Reserved documentation for future, separate experiments
-data/                  Local original datasets and archives (ignored by Git)
-processed/             Generated preprocessing outputs (ignored)
-graphs/                Generated graph artifacts (ignored)
-results/sccvae_baseline/ Historical runs, checkpoints, logs, metrics and audits
-docs/                  Original upstream documentation
-.venv/                 Local Python environment (ignored)
-requirements.txt       Pinned direct dependencies
+The repository brings together an existing SCCVAE codebase, baseline run tooling, data preparation, evaluation utilities, and separate experiments around causal graph construction. It is a research workbench rather than a packaged, ready-to-deploy library.
+
+> **Research attribution:** `sc_causal/` contains upstream SCCVAE-related research code and utilities. Do **not** interpret that code, the upstream model design, or upstream figures as original contributions by this repository's maintainer. The repository's experiment organization and locally added workflows should be distinguished from upstream work and traced to their corresponding source or documentation.
+
+## Workspace at a glance
+
+| Directory | Purpose |
+| --- | --- |
+| `sc_causal/` | Original / upstream research implementation and utilities |
+| `scripts/setup/` | Environment setup and dependency checks |
+| `scripts/baseline/` | Baseline launch, evaluation and audit scripts |
+| `scripts/data/` | Resumable dataset preparation and validation |
+| `scripts/causal/` | Causal discovery and bounded benchmark utilities |
+| `configs/` | Experiment configuration references |
+| `experiments/` | Baseline index, future experiments and implementation notes |
+| `docs/` | Upstream and project-specific documentation |
+
+## Experimental workflow
+
+```mermaid
+flowchart LR
+    Data[Input data] --> Prep[Preprocessing / splits]
+    Prep --> Base[SCCVAE baseline]
+    Prep --> Graph[Causal-graph experiments]
+    Base --> Audit[Evaluation and audits]
+    Graph --> Audit
 ```
 
-Run commands from the repository root:
+The diagram is a conceptual map and does not imply that all planned GNN experiments are implemented.
+
+## Setup
+
+The existing setup is documented for **Windows, Python 3.12 and CUDA 12.4**. Read [`docs/UPSTREAM_README.md`](docs/UPSTREAM_README.md) for the upstream instructions and the [archived project notes](docs/research-workspace-notes.md) for the prior README's paths, warnings and experiment-specific run instructions.
 
 ```powershell
-.\.venv\Scripts\Activate.ps1
-python .\scripts\setup\verify_setup.py
-# Installation only, when needed:
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup\setup.ps1
+python -m venv .venv
+python -m pip install -r requirements.txt
+python scripts/setup/verify_setup.py
 ```
 
-The completed K562 OOD split-0 run is indexed in [experiments/baseline](experiments/baseline/README.md). Its historical artifact paths and contents are preserved. `sc_causal/h5ad_datafiles` is a Windows junction to `data/h5ad_datafiles`; keep it for original data loading.
+Check any PowerShell setup launcher or project-specific dependency list before invoking training.
 
-The baseline launcher is now `scripts/baseline/start_fresh_baseline.ps1`. It **starts new training** when explicitly run and writes to `results/sccvae_baseline/runs/fresh_<timestamp>/`, with `logs/`, `provenance/`, and the original `outs/ood_split_0_full/` checkpoint/config layout. It does not resume an old run. Nothing trains on setup or import verification.
+## Reproducibility and claim boundaries
 
-Evaluation/history/report/audit scripts under `scripts/baseline/` target the completed run and may write derived artifacts when executed; do not rerun them over frozen results casually. Existing experiment results were not regenerated during organization. Read the discrepancy audit before comparisons: retain learned-shift and test-selected results separately; preprocessing is transductive.
+- Historical baseline checkpoints, local datasets, generated graphs and run outputs may be stored only in ignored local directories; a repository clone alone is not a full reproduction.
+- The original project notes state that certain preprocessing is transductive and that learned-shift and test-selected results must remain separate. Respect those distinctions in any reported comparison.
+- GNN preparation scripts and causal-discovery benchmarks do not automatically prove a trained or validated GNN system exists.
+- Large causal searches and fresh training are **manual operations**, not setup checks; avoid triggering them unintentionally.
 
-Future experiment definitions belong under `experiments/future/<experiment>/`, configurations under `configs/<experiment>/`, and outputs under `results/<experiment>/`. Keep them separate from `results/sccvae_baseline/`.
+See [`experiments/baseline/`](experiments/baseline/), [`experiments/future/`](experiments/future/), and the [archived detailed README](docs/research-workspace-notes.md) before running experiments.
 
-Modules 2/3 preparation and correlation graph are documented in [experiments/future/gnn_split0](experiments/future/gnn_split0/README.md). Generated data are in `processed/gnn_split0/` and `graphs/correlation_split0/`; these commands do not implement or train a GNN.
+## Presenting this work
 
-Module 4A PC/BOSS runners and recovery semantics are documented in [MODULE4A.md](experiments/future/gnn_split0/MODULE4A.md). Artifacts are separate under `graphs/causal_split0/`. Full 279-node searches are manual only; the benchmark script runs bounded subsets.
+Useful contributions to highlight include the independently implemented experiment orchestration, validation and comparison protocols **where substantiated by the corresponding source code**. For any published result, name the upstream baseline, dataset split, protocol and evaluation limitations rather than making broad causal or state-of-the-art claims.
+
+---
+
+**Maintainer:** [Alihassan0155](https://github.com/Alihassan0155) · [Portfolio](https://ali-hassan-khan-portfolio.vercel.app/)
